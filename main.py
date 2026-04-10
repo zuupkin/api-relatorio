@@ -70,7 +70,7 @@ async def gerar_relatorio(file: UploadFile = File(...)):
             buffer.write(await file.read())
 
         gemini_file = genai.upload_file(temp_file_path)
-        model = genai.GenerativeModel('gemini-1.5-flash')
+        model = genai.GenerativeModel('gemini-2.5-flash')
         
         response = model.generate_content([gemini_file, PROMPT_COMERCIAL])
         html_final = response.text.replace("```html", "").replace("```", "").strip()
