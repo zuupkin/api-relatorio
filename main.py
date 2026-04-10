@@ -1,17 +1,22 @@
 import os
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
 import google.generativeai as genai
 import uvicorn
 
-# 1. Configurações Iniciais
+# 1. Configurações Iniciais da IA
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 genai.configure(api_key=GEMINI_API_KEY)
 
+# 2. Criação do Servidor (Obrigatório vir ANTES das rotas e middlewares)
 app = FastAPI(title="API de Inteligência Comercial")
 
-# 2. Middleware
+# 3. Montagem do Front-end e Middlewares
+# Por que fazer isso? Isso avisa ao FastAPI que a pasta "static" contém arquivos do front-end (CSS, JS, imagens) e os deixa acessíveis.
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -62,7 +67,12 @@ RESTRIÇÕES FINAIS E PENSAMENTO EM CADEIA:
 * FORMATO DE SAÍDA: Retorne ABSOLUTAMENTE APENAS o código HTML completo. O primeiro caractere deve ser <!DOCTYPE html> e o último </html>. Sem markdown.
 """
 
-# 3. Rotas
+# 4. Rotas de Navegação e API
+@app.get("/", response_class=HTMLResponse)
+async def read_index():
+    # Por que FileResponse? Ele carrega e devolve o arquivo HTML para o navegador do usuário com os cabeçalhos corretos de resposta HTTP.
+    return FileResponse('static/index.html')
+
 @app.post("/gerar-relatorio")
 async def gerar_relatorio(file: UploadFile = File(...)):
     temp_file_path = f"{file.filename}"
@@ -87,8 +97,8 @@ async def gerar_relatorio(file: UploadFile = File(...)):
             os.remove(temp_file_path)
         return {"erro": f"Ocorreu um erro no processamento: {str(e)}"}
 
-# 4. Bloco de Inicialização (Sempre por último)
+# 5. Bloco de Inicialização (Sempre por último)
 if __name__ == "__main__":
+    # Por que usar os.environ.get? O Cloud Run aloca uma porta dinâmica aleatória a cada inicialização através desta variável de ambiente. Se tentarmos forçar a porta 8080 rígida, o container falhará ao iniciar.
     port = int(os.environ.get("PORT", 8080))
     uvicorn.run(app, host="0.0.0.0", port=port)
-
