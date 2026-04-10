@@ -171,7 +171,6 @@
     </div>
 
     <script>
-        const NGROK_URL = "https://api-relatorio-comercial.onrender.com";
         const fileInput = document.getElementById('arquivo');
         const fileNameDisplay = document.getElementById('file-name');
         const btnEnviar = document.getElementById('btn-enviar');
@@ -201,9 +200,9 @@
             resultadoContainer.style.display = 'none';
 
             try {
-                const response = await fetch(`${NGROK_URL}/gerar-relatorio`, {
+                // Requisição atualizada para usar o caminho relativo do próprio servidor
+                const response = await fetch(`/gerar-relatorio`, {
                     method: 'POST',
-                    headers: { "ngrok-skip-browser-warning": "true" },
                     body: formData
                 });
 
