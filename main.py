@@ -3,13 +3,15 @@ from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
 import google.generativeai as genai
+import uvicorn
 
-# Puxa a chave de forma segura do servidor (Render)
+# 1. Configurações Iniciais
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 genai.configure(api_key=GEMINI_API_KEY)
 
 app = FastAPI(title="API de Inteligência Comercial")
 
+# 2. Middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -60,17 +62,17 @@ RESTRIÇÕES FINAIS E PENSAMENTO EM CADEIA:
 * FORMATO DE SAÍDA: Retorne ABSOLUTAMENTE APENAS o código HTML completo. O primeiro caractere deve ser <!DOCTYPE html> e o último </html>. Sem markdown.
 """
 
+# 3. Rotas
 @app.post("/gerar-relatorio")
 async def gerar_relatorio(file: UploadFile = File(...)):
-    # No Render, não temos acesso garantido à pasta /tmp do mesmo jeito que no Colab.
-    # Vamos ler o arquivo em memória e passar para o Gemini diretamente, ou salvar na raiz temporariamente.
     temp_file_path = f"{file.filename}"
     try:
         with open(temp_file_path, "wb") as buffer:
             buffer.write(await file.read())
 
         gemini_file = genai.upload_file(temp_file_path)
-        model = genai.GenerativeModel('gemini-2.5-flash')
+        # Atenção: Se o 2.5 falhar, tente o 'gemini-1.5-flash'
+        model = genai.GenerativeModel('gemini-1.5-flash') 
         
         response = model.generate_content([gemini_file, PROMPT_COMERCIAL])
         html_final = response.text.replace("```html", "").replace("```", "").strip()
@@ -84,3 +86,9 @@ async def gerar_relatorio(file: UploadFile = File(...)):
         if os.path.exists(temp_file_path):
             os.remove(temp_file_path)
         return {"erro": f"Ocorreu um erro no processamento: {str(e)}"}
+
+# 4. Bloco de Inicialização (Sempre por último)
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8080))
+    uvicorn.run(app, host="0.0.0.0", port=port)
+
