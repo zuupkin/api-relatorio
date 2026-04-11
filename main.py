@@ -36,7 +36,8 @@ Estilo: Corte adjetivos, introduções educadas, jargões vazios e explicações
 
 Extensão: O documento final deve ser enxuto de leitura dinâmica. O conteúdo visível dentro da tag <body> não deve exceder 600 palavras no total.
 
-REGRA DE OURO 3 (CAUSALIDADE OBRIGATÓRIA E CONTEXTO): Em hipótese alguma adicione informações soltas. Toda métrica apresentada deve estar obrigatoriamente atrelada ao seu "porquê" (sua causa raiz suportada pelos dados). Cada número deve justificar um contexto, e cada contexto deve justificar uma ação.
+REGRA DE OURO 3 (CAUSALIDADE OBRIGATÓRIA, CONTEXTO E RASTREABILIDADE DE FONTES): Em hipótese alguma adicione informações soltas. Toda métrica apresentada deve estar obrigatoriamente atrelada ao seu "porquê" (sua causa raiz suportada pelos dados). Cada número deve justificar um contexto, e cada contexto deve justificar uma ação.
+Rastreabilidade (Obrigatório): Toda métrica, insight estrutural ou cruzamento de dados deve obrigatoriamente conter uma micro-legenda informando a origem exata da informação dentro do documento original. Se for um dado combinado, explicite. Exemplo de formatação: (Fonte: Cruzamento de dados de ruptura do slide 3 com margem do slide 6).
 
 REGRA DE OURO 4 (HIGIENIZAÇÃO E CONTEXTO DO PDF): O arquivo de entrada frequentemente contém ruídos e mistura canais ou formatos distintos (ex: Varejo vs. Atacarejo).
 
@@ -54,7 +55,7 @@ Linha horizontal divisória limpa.
 
 SUMÁRIO MACRO (O QUÊ ACONTECEU)
 
-Máximo de 3 bullet points diretos com os KPIs centrais e o diagnóstico geral do negócio. Sem texto corrido. Apenas os fatos quantitativos atrelados ao seu contexto direto.
+Máximo de 3 bullet points diretos com os KPIs centrais e o diagnóstico geral do negócio. Sem texto corrido. Apenas os fatos quantitativos atrelados ao seu contexto direto. Adicione a micro-legenda de rastreabilidade ao final de cada bullet.
 
 DIAGNÓSTICO SWOT (POR QUE ACONTECEU)
 
@@ -70,7 +71,7 @@ Limite-se a MÁXIMO 4 Cards de Ação Estratégica (as mais críticas para o neg
 
 Cada card deve conter os seguintes elementos de forma concisa:
 
-[Dado Gatilho]: A evidência numérica exata que gerou a ação (em itálico ou blockquote curto).
+[Dado Gatilho com Fonte]: A evidência numérica exata que gerou a ação (em itálico ou blockquote curto), seguida imediatamente pela legenda de onde o dado veio (ex: "Queda de 4% no sell-out regional" - Fonte: Gráfico de dispersão, Slide 5).
 
 [Ação Recomendada]: O que fazer (inicie com verbo no imperativo).
 
@@ -82,7 +83,7 @@ Cada card deve conter os seguintes elementos de forma concisa:
 
 REGRAS DE ESTILO CSS (FOCO EM LEGIBILIDADE E IMPRESSÃO):
 
-Paleta Executiva: Azul Marinho (#1a365d) para títulos, Cinza Ártico (#f7fafc) para fundos de bloco, acentos em #2b6cb0.
+Paleta Executiva: Azul Marinho (#1a365d) para títulos, Cinza Ártico (#f7fafc) para fundos de bloco, acentos em #2b6cb0. Estilize as micro-legendas de fonte com uma tipografia menor e cor discreta (ex: #718096, font-size: 0.8em, font-style: italic).
 
 Fonte OBRIGATÓRIA: font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 
@@ -90,14 +91,14 @@ CSS de Impressão OBRIGATÓRIO: Inclua a diretiva @media print com quebras de p�
 
 RESTRIÇÕES FINAIS E PENSAMENTO EM CADEIA:
 
-ZERO ALUCINAÇÃO: É ESTRITAMENTE PROIBIDO inventar dados.
+ZERO ALUCINAÇÃO: É ESTRITAMENTE PROIBIDO inventar dados ou slides que não existem.
 
 PROIBIDO criar Índice, Conclusão, Introdução.
 
 EXTRAÇÃO E MECE (OBRIGATÓRIO): O primeiro caractere absoluto da sua resposta deve ser <!DOCTYPE html>. Imediatamente após abrir a tag <body>, você DEVE inserir um comentário HTML invisível estruturando seu raciocínio. Siga este template exato no comentário:
 ``
 
-FORMATO DE SAÍDA: Após o comentário oculto, inicie a renderização visual do HTML. Retorne ABSOLUTAMENTE APENAS o código HTML completo. É ESTRITAMENTE PROIBIDO usar as crases de formatação markdown (```html) no início e no fim da resposta.
+FORMATO DE SAÍDA: Após o comentário oculto, inicie a renderização visual do HTML. Retorne ABSOLUTAMENTE APENAS o código HTML completo. É ESTRITAMENTE PROIBIDO usar as crases de formatação markdown (
 """
 
 # 4. Rotas de Navegação e API
