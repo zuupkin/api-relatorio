@@ -7,10 +7,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #4F46E5; /* Indigo mais vibrante e moderno */
+            --primary: #4F46E5;
             --primary-hover: #4338CA;
             --surface: #ffffff;
-            --background: #F3F4F6; /* Cinza slate super claro */
+            --background: #F3F4F6;
             --text-main: #111827;
             --text-muted: #6B7280;
             --border: #E5E7EB;
@@ -216,6 +216,12 @@
             border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
+            justify-content: space-between; /* Espalha os itens */
+        }
+
+        .janela-controles {
+            display: flex;
+            align-items: center;
             gap: 8px;
         }
 
@@ -235,9 +241,31 @@
             color: var(--text-muted);
         }
 
+        /* Estilo do botão de imprimir/PDF */
+        .btn-acao {
+            background-color: var(--surface);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-acao:hover {
+            background-color: #EEF2FF;
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
         #frame-relatorio {
             width: 100%;
-            height: 800px; /* Altura ajustada para visualização A4 */
+            height: 800px;
             border: none;
             background: white;
             display: block;
@@ -278,8 +306,15 @@
 
     <div id="resultado">
         <div class="resultado-header">
-            <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
-            <span class="header-title">Output: preview.html</span>
+            <div class="janela-controles">
+                <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+                <span class="header-title">Output: Relatório_Executivo.html</span>
+            </div>
+            
+            <button id="btn-imprimir" class="btn-acao">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                Salvar PDF
+            </button>
         </div>
         <iframe id="frame-relatorio"></iframe>
     </div>
@@ -292,6 +327,7 @@
         const resultadoContainer = document.getElementById('resultado');
         const frameRelatorio = document.getElementById('frame-relatorio');
         const dropZone = document.getElementById('drop-zone');
+        const btnImprimir = document.getElementById('btn-imprimir');
 
         // Lógica de arrastar e soltar (Drag & Drop UX)
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
@@ -367,16 +403,22 @@
 
             } catch (error) {
                 alert("Ocorreu um erro: " + error.message);
-                btnEnviar.style.display = 'flex'; // Volta para flex para manter o ícone alinhado
+                btnEnviar.style.display = 'flex';
             } finally {
                 loading.style.display = 'none';
                 if(resultadoContainer.style.display === 'block'){
-                    // Se deu sucesso, pode querer mostrar um botão de "Nova Análise" no futuro
                     btnEnviar.style.display = 'flex'; 
                     btnEnviar.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg> Nova Análise';
                     btnEnviar.onclick = () => location.reload();
                 }
             }
+        });
+
+        // Lógica para Imprimir/Salvar PDF do Iframe
+        btnImprimir.addEventListener('click', function() {
+            // Garante que o iframe está focado antes de chamar o print
+            frameRelatorio.contentWindow.focus();
+            frameRelatorio.contentWindow.print();
         });
     </script>
 </body>
