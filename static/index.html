@@ -4,169 +4,283 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Análise Executiva | Inteligência Comercial</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #2b6cb0;
-            --primary-dark: #1a365d;
-            --accent: #00d2ff;
-            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            --glass: rgba(255, 255, 255, 0.8);
+            --primary: #4F46E5; /* Indigo mais vibrante e moderno */
+            --primary-hover: #4338CA;
+            --surface: #ffffff;
+            --background: #F3F4F6; /* Cinza slate super claro */
+            --text-main: #111827;
+            --text-muted: #6B7280;
+            --border: #E5E7EB;
+            --ring: rgba(79, 70, 229, 0.2);
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --radius: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background: var(--bg-gradient);
-            min-height: 100vh;
-            color: #2d3748;
+            background-color: var(--background);
+            background-image: radial-gradient(#D1D5DB 1px, transparent 1px);
+            background-size: 24px 24px;
+            color: var(--text-main);
             margin: 0;
-            padding: 40px 20px;
+            padding: 60px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            min-height: 100vh;
         }
 
         .container {
-            background: var(--glass);
-            backdrop-filter: blur(10px);
-            padding: 50px;
-            border-radius: 24px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            max-width: 650px;
+            background: var(--surface);
+            padding: 48px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            max-width: 600px;
             width: 100%;
             text-align: center;
-            border: 1px solid rgba(255,255,255,0.3);
+            border: 1px solid var(--border);
+            position: relative;
+            z-index: 10;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #EEF2FF;
+            color: var(--primary);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
         }
 
         h1 { 
-            margin-top: 0; 
+            margin: 0 0 12px 0; 
             font-size: 32px; 
             font-weight: 700;
-            color: var(--primary-dark);
-            letter-spacing: -1px;
+            letter-spacing: -0.025em;
+            color: var(--text-main);
         }
 
         p { 
-            color: #718096; 
-            margin-bottom: 40px; 
-            font-size: 18px;
-            font-weight: 300;
+            color: var(--text-muted); 
+            margin: 0 0 40px 0; 
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.5;
         }
 
         /* Área de Upload Estilizada */
         .upload-area {
-            display: block;
-            border: 2px dashed #cbd5e0;
-            border-radius: 16px;
-            padding: 50px 30px;
-            background-color: rgba(255,255,255,0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed #D1D5DB;
+            border-radius: 12px;
+            padding: 40px 20px;
+            background-color: #F9FAFB;
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            overflow: hidden;
+            transition: all 0.2s ease;
         }
 
-        .upload-area:hover { 
+        .upload-area:hover, .upload-area.dragover { 
             border-color: var(--primary); 
-            background-color: #fff;
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(43, 108, 176, 0.1);
+            background-color: #EEF2FF;
+        }
+
+        .upload-icon {
+            color: #9CA3AF;
+            margin-bottom: 16px;
+            transition: color 0.2s ease;
+        }
+
+        .upload-area:hover .upload-icon {
+            color: var(--primary);
         }
 
         #file-name {
-            font-size: 16px;
-            color: #4a5568;
+            font-size: 15px;
+            color: var(--text-main);
         }
 
         #file-name strong {
-            color: var(--primary);
-            font-size: 18px;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        #file-name small {
+            color: var(--text-muted);
+            font-size: 13px;
         }
 
         input[type="file"] { display: none; }
 
-        /* Botão com Efeito de Elevação */
+        /* Botão Principal */
         .btn-submit {
-            background: linear-gradient(90deg, var(--primary-dark), var(--primary));
+            background-color: var(--primary);
             color: white;
             border: none;
-            padding: 16px 32px;
-            font-size: 18px;
-            font-weight: 600;
-            border-radius: 12px;
-            margin-top: 30px;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: 10px;
+            margin-top: 24px;
             cursor: pointer;
             width: 100%;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(43, 108, 176, 0.3);
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
         }
 
         .btn-submit:hover:not(:disabled) { 
-            transform: scale(1.02);
-            box-shadow: 0 8px 25px rgba(43, 108, 176, 0.4);
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-submit:focus {
+            outline: none;
+            box-shadow: 0 0 0 4px var(--ring);
         }
 
         .btn-submit:disabled { 
-            background: #cbd5e0; 
+            background-color: #D1D5DB; 
             cursor: not-allowed; 
-            box-shadow: none;
+            transform: none;
         }
 
-        /* Loading Animado */
+        /* Loading Animado (Spinner UI) */
         #loading { 
             display: none; 
-            margin-top: 25px; 
-            font-weight: 600; 
-            color: var(--primary); 
-            animation: pulse 1.5s infinite;
+            margin-top: 24px; 
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(79, 70, 229, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+            margin: 0 auto 12px auto;
+        }
+
+        .loading-text {
+            color: var(--primary);
+            font-size: 14px;
+            font-weight: 500;
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
         @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
         }
 
         /* Iframe de Resultado */
         #resultado {
-            margin-top: 50px;
+            margin-top: 40px;
             width: 100%;
-            max-width: 1000px;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+            max-width: 900px;
+            background: var(--surface);
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
             display: none;
             overflow: hidden;
-            border: 1px solid #e2e8f0;
+            border: 1px solid var(--border);
+        }
+
+        /* Simulação de barra de janela para o relatório */
+        .resultado-header {
+            background: #F9FAFB;
+            padding: 12px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        .dot.r { background: #EF4444; }
+        .dot.y { background: #F59E0B; }
+        .dot.g { background: #10B981; }
+
+        .header-title {
+            margin-left: 10px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-muted);
         }
 
         #frame-relatorio {
             width: 100%;
-            height: 900px;
+            height: 800px; /* Altura ajustada para visualização A4 */
             border: none;
+            background: white;
+            display: block;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>Análise Executiva Premium</h1>
-        <p>Transforme dados brutos em inteligência comercial em segundos.</p>
+        <span class="badge">Powered by AI</span>
+        <h1>Análise Executiva</h1>
+        <p>Transforme apresentações brutas em inteligência comercial acionável.</p>
 
-        <label class="upload-area" for="arquivo">
+        <label class="upload-area" for="arquivo" id="drop-zone">
+            <svg class="upload-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            
             <div id="file-name">
-                <span style="font-size: 40px; display: block; margin-bottom: 10px;">📊</span>
-                <strong>Clique para selecionar</strong><br>
-                <small>PDF, PPTX, PNG ou JPEG</small>
+                <strong>Clique para selecionar ou arraste o arquivo</strong>
+                <small>Suporta PDF, PPTX, PNG ou JPEG (Max: 15MB)</small>
             </div>
-            <input type="file" id="arquivo" accept=".pdf,.png,.jpg,.jpeg">
+            <input type="file" id="arquivo" accept=".pdf,.png,.jpg,.jpeg,.pptx">
         </label>
 
-        <button class="btn-submit" id="btn-enviar" disabled>Gerar Relatório Analítico</button>
-        <div id="loading">🚀 Processando inteligência de mercado...</div>
+        <button class="btn-submit" id="btn-enviar" disabled>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            Gerar Relatório Analítico
+        </button>
+        
+        <div id="loading">
+            <div class="spinner"></div>
+            <div class="loading-text">Processando motor de inteligência...</div>
+        </div>
     </div>
 
     <div id="resultado">
+        <div class="resultado-header">
+            <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+            <span class="header-title">Output: preview.html</span>
+        </div>
         <iframe id="frame-relatorio"></iframe>
     </div>
 
@@ -177,17 +291,53 @@
         const loading = document.getElementById('loading');
         const resultadoContainer = document.getElementById('resultado');
         const frameRelatorio = document.getElementById('frame-relatorio');
+        const dropZone = document.getElementById('drop-zone');
 
-        fileInput.addEventListener('change', function() {
-            if (this.files.length > 0) {
-                fileNameDisplay.innerHTML = `<strong>Arquivo pronto:</strong><br>${this.files[0].name}`;
-                btnEnviar.disabled = false;
-            } else {
-                fileNameDisplay.innerHTML = `<span style="font-size: 40px; display: block; margin-bottom: 10px;">📊</span><strong>Clique para selecionar</strong><br><small>PDF, PPTX, PNG ou JPEG</small>`;
-                btnEnviar.disabled = true;
-            }
+        // Lógica de arrastar e soltar (Drag & Drop UX)
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
         });
 
+        function preventDefaults (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => dropZone.classList.add('dragover'), false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => dropZone.classList.remove('dragover'), false);
+        });
+
+        dropZone.addEventListener('drop', handleDrop, false);
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            fileInput.files = files;
+            updateUI(files);
+        }
+
+        // Lógica de clique padrão
+        fileInput.addEventListener('change', function() {
+            updateUI(this.files);
+        });
+
+        function updateUI(files) {
+            if (files.length > 0) {
+                const icon = `<svg class="upload-icon" style="color: var(--primary);" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`;
+                fileNameDisplay.innerHTML = `${icon}<strong>${files[0].name}</strong><small>Pronto para análise</small>`;
+                btnEnviar.disabled = false;
+            } else {
+                const icon = `<svg class="upload-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>`;
+                fileNameDisplay.innerHTML = `${icon}<strong>Clique para selecionar ou arraste o arquivo</strong><small>Suporta PDF, PPTX, PNG ou JPEG (Max: 15MB)</small>`;
+                btnEnviar.disabled = true;
+            }
+        }
+
+        // Submissão do arquivo
         btnEnviar.addEventListener('click', async function() {
             const file = fileInput.files[0];
             if (!file) return;
@@ -200,7 +350,6 @@
             resultadoContainer.style.display = 'none';
 
             try {
-                // Requisição atualizada para usar o caminho relativo do próprio servidor
                 const response = await fetch(`/gerar-relatorio`, {
                     method: 'POST',
                     body: formData
@@ -212,16 +361,21 @@
                 frameRelatorio.srcdoc = htmlGerado;
                 resultadoContainer.style.display = 'block';
                 
-                // Scroll suave para o resultado
                 setTimeout(() => {
-                    resultadoContainer.scrollIntoView({ behavior: 'smooth' });
-                }, 500);
+                    resultadoContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
 
             } catch (error) {
                 alert("Ocorreu um erro: " + error.message);
-                btnEnviar.style.display = 'block';
+                btnEnviar.style.display = 'flex'; // Volta para flex para manter o ícone alinhado
             } finally {
                 loading.style.display = 'none';
+                if(resultadoContainer.style.display === 'block'){
+                    // Se deu sucesso, pode querer mostrar um botão de "Nova Análise" no futuro
+                    btnEnviar.style.display = 'flex'; 
+                    btnEnviar.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg> Nova Análise';
+                    btnEnviar.onclick = () => location.reload();
+                }
             }
         });
     </script>
