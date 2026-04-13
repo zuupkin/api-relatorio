@@ -1,4 +1,8 @@
 fastapi
 uvicorn
+google-cloud-storage
+paddlepaddle
+paddleocr
+pdf2image
+opencv-python-headless
 google-generativeai
-python-multipart
