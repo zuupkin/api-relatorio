@@ -1,0 +1,25 @@
+# Use uma imagem base leve, mas robusta
+FROM python:3.10-slim
+
+# Variáveis de ambiente para não gerar arquivos .pyc e não bufferizar logs
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+# Instale dependências essenciais do sistema operacional para OCR e visão computacional
+RUN apt-get update && apt-get install -y \
+    libgl1-mesa-glx \
+    libglib2.0-0 \
+    poppler-utils \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Instale as dependências do Python
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copie o código da aplicação
+COPY . .
+
+# Comando de execução
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
