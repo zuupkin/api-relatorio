@@ -116,7 +116,7 @@ async def gerar_relatorio(file: UploadFile = File(...)):
 
         gemini_file = genai.upload_file(temp_file_path)
         # Atenção: Se o 2.5 falhar, tente o 'gemini-1.5-flash'
-        model = genai.GenerativeModel('gemini-2.5-pro') 
+        model = genai.GenerativeModel('gemini-2.5-flash') 
         
         response = model.generate_content([gemini_file, PROMPT_COMERCIAL])
         html_final = response.text.replace("```html", "").replace("```", "").strip()
